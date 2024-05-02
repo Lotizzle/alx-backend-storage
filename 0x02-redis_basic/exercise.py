@@ -10,6 +10,20 @@ from functools import wraps
 from typing import Union, Callable
 
 
+def count_calls(method: callable) -> callable:
+    """
+    This method counts the number of times a method was called
+    """
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """
+        This method returns the original value of the method
+        """
+        key = method.__qualname__
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
+    return wrapper
+
 def call_history(method: Callable) -> Callable:
     """
     Decorator to store the history of inputs
@@ -44,6 +58,7 @@ class Cache:
         self._redis.flushdb()
 
     @call_history
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         The store method return the value of a random key
