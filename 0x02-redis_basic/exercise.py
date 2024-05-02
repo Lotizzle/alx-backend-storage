@@ -6,8 +6,23 @@ for creating a redis instance.
 
 import redis
 import uuid
-from typing import Union
+from functools import wraps
+from typing import Union, Callable
 
+
+def count_calls(method: callable) -> callable:
+    """
+    This method counts the number of times a method was called
+    """
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """
+        This method returns the original value of the method
+        """
+        key = method.__qualname__
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
+    return wrapper
 
 class Cache:
     """
@@ -21,6 +36,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         The store method return the value of a random key
