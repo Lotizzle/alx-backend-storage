@@ -45,6 +45,9 @@ def cache_page(expiration: int = 10) -> Callable:
             # Cache the result with an expiration time
             redis_client.setex(cache_key, expiration, result)
 
+            # Schedule the cache to expire after 'expiration' seconds
+            redis_client.expire(cache_key, expiration)
+
             return result
         return wrapper
     return decorator
@@ -67,3 +70,10 @@ if __name__ == "__main__":
     print(get_page(url))
     print(get_page(url))
     print(f"Access count: {redis_client.get(f'count:{url}').decode('utf-8')}")
+
+    # Sleep for 10 seconds to allow cache to expire
+    import time
+    time.sleep(10)
+
+    # Fetch the page again after expiration
+    print(get_page(url))
