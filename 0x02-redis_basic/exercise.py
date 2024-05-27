@@ -24,6 +24,7 @@ def count_calls(method: Callable) -> Callable:
         return method(self, *args, **kwargs)
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
     """
     Decorator to store the history of inputs
@@ -114,4 +115,5 @@ class Cache:
 
         print(f"{method_name} was called {len(inputs)} times:")
         for input_args, output in zip(inputs, outputs):
-            print(f"{method_name}(*{input_args.decode('utf-8')}) -> {output.decode('utf-8')}")
+            print(f"{method_name}(*{input_args.decode('utf-8')}) ->
+                  {output.decode('utf-8')}")
