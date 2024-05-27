@@ -10,7 +10,7 @@ from functools import wraps
 from typing import Union, Callable
 
 
-def count_calls(method: callable) -> callable:
+def count_calls(method: Callable) -> Callable:
     """
     This method counts the number of times a method was called
     """
