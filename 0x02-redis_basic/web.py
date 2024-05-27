@@ -13,6 +13,7 @@ from typing import Callable
 # Initialize Redis client
 redis_client = redis.Redis()
 
+
 def cache_page(expiration: int = 10) -> Callable:
     """
     Decorator to cache the result of get_page function.
@@ -48,6 +49,7 @@ def cache_page(expiration: int = 10) -> Callable:
         return wrapper
     return decorator
 
+
 @cache_page(expiration=10)
 def get_page(url: str) -> str:
     """
@@ -56,9 +58,12 @@ def get_page(url: str) -> str:
     response = requests.get(url)
     return response.text
 
+
 if __name__ == "__main__":
-    url = "http://slowwly.robertomurray.co.uk/delay/5000/url/http://www.example.com"
+    url = (
+        "http://slowwly.robertomurray.co.uk/delay/5000/"
+        "url/http://www.example.com"
+    )
     print(get_page(url))
     print(get_page(url))
     print(f"Access count: {redis_client.get(f'count:{url}').decode('utf-8')}")
-
