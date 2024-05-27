@@ -63,10 +63,7 @@ def get_page(url: str) -> str:
 
 
 if __name__ == "__main__":
-    url = (
-        "http://slowwly.robertomurray.co.uk/delay/5000/"
-        "url/http://www.example.com"
-    )
+    url = "http://google.com"
     print(get_page(url))
     print(get_page(url))
     print(f"Access count: {redis_client.get(f'count:{url}').decode('utf-8')}")
